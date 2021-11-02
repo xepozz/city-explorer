@@ -36,30 +36,30 @@ function debugCity() {
         popup
             .setLatLng(e.latlng)
             .setContent("Found city: " + result.display_name)
-            // .openOn(mymap)
+        // .openOn(mymap)
         ;
     });
 }
 
 function createBorder(centerLatitude, centerLongitude, zoom, polygonsArray, cityName) {
-    L.polygon([polygonsArray])
-        .addTo(mymap)
-        // .bindPopup("I am a polygon.")
+    const coverage = L.polygon([polygonsArray])
+        .bindPopup("I am a polygon.")
     ;
+    coverageLayer.addLayer(coverage)
 
-    L.marker([
-        centerLatitude,
-        centerLongitude,
-    ])
-        .addTo(mymap)
-        .bindPopup(`<b>Congratulations!</b><br />You visited ${cityName}.`)
+    const marker = L.marker([
+            centerLatitude,
+            centerLongitude,
+        ])
+            .bindPopup(`<b>Congratulations!</b><br />You visited ${cityName}.`)
         // .openPopup()
     ;
+    markerLayer.addLayer(marker)
 }
 
 
 async function searchCitiesByQuery(text) {
-    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&dedupe=1'
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&dedupe=1&zoom=13&polygon_geojson=1&addressdetails=1'
     return await fetch(`${url}&q=${text}`).then(response => {
         let result = response.json();
         return result
